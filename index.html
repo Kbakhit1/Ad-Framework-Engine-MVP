@@ -1,0 +1,434 @@
+import React, { useState, useEffect } from 'react';
+import { Upload, ImageIcon, FileText, Settings, Wand2, Play, CheckCircle2, Layout, Video, MessageSquare, Film, Calendar, Share2, Layers } from 'lucide-react';
+
+export default function App() {
+  const [step, setStep] = useState(1);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [selectedFramework, setSelectedFramework] = useState(null);
+  const [mediaTab, setMediaTab] = useState('video'); // 'image', 'video', or 'carousel'
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+
+  // Fake Product Data
+  const [product, setProduct] = useState({
+    name: '',
+    description: '',
+    imageUploaded: false
+  });
+
+  const frameworks = [
+    { id: 'pas', name: 'PAS Framework', desc: 'Problem, Agitate, Solution (مثالي للتحويل السريع)', match: '98%' },
+    { id: 'aida', name: 'AIDA Model', desc: 'Attention, Interest, Desire, Action (مثالي للمنتجات الجديدة)', match: '85%' },
+    { id: 'story', name: 'Hook-Story-Offer', desc: 'بناء قصة حول المنتج (مثالي لإعلانات الفيديو)', match: '72%' }
+  ];
+
+  const handleAnalyze = () => {
+    if (!product.name) return;
+    setIsAnalyzing(true);
+    let currentProgress = 0;
+    const interval = setInterval(() => {
+      currentProgress += 5;
+      setProgress(currentProgress);
+      if (currentProgress >= 100) {
+        clearInterval(interval);
+        setIsAnalyzing(false);
+        setStep(2); // Go to Framework Selection
+      }
+    }, 100);
+  };
+
+  const handleGenerate = () => {
+    setStep(3); // Show loading generation
+    setTimeout(() => {
+      setStep(4); // Show Results
+    }, 2500);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-900 text-slate-200 font-sans flex overflow-hidden">
+      
+      {/* Sidebar */}
+      <aside className="w-64 bg-slate-950 border-r border-slate-800 flex flex-col hidden md:flex">
+        <div className="p-6 flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-black text-white shadow-lg shadow-indigo-500/20">A</div>
+            <div>
+                <h1 className="font-black text-lg tracking-wide text-white">Ad<span className="text-indigo-400">Engine</span></h1>
+                <p className="text-[9px] text-slate-500 uppercase tracking-widest font-mono">SaaS MVP v2.5 (Reels & Carousel)</p>
+            </div>
+        </div>
+        <nav className="flex-1 px-4 py-4 space-y-2">
+            <button className="w-full flex items-center gap-3 bg-indigo-500/10 text-indigo-400 px-4 py-3 rounded-xl font-bold border border-indigo-500/20 transition-all">
+                <Wand2 size={18} /> إنشاء إعلان جديد
+            </button>
+            <button className="w-full flex items-center gap-3 text-slate-400 hover:text-white hover:bg-slate-900 px-4 py-3 rounded-xl font-medium transition-all">
+                <Layout size={18} /> مشاريعي (Dashboard)
+            </button>
+            <button className="w-full flex items-center gap-3 text-slate-400 hover:text-white hover:bg-slate-900 px-4 py-3 rounded-xl font-medium transition-all">
+                <Calendar size={18} /> الجدولة والنشر (Planner)
+            </button>
+            <button className="w-full flex items-center gap-3 text-slate-400 hover:text-white hover:bg-slate-900 px-4 py-3 rounded-xl font-medium transition-all">
+                <Settings size={18} /> إعدادات الذكاء الاصطناعي
+            </button>
+        </nav>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col relative overflow-y-auto">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
+        
+        <header className="p-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-10 flex justify-between items-center">
+            <div>
+                <h2 className="text-2xl font-bold text-white">Ad Framework Engine</h2>
+                <p className="text-sm text-slate-400">من الصورة إلى ريلز وكاروسيل مجدول تلقائياً</p>
+            </div>
+            <div className="flex gap-2">
+                <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    API Connected
+                </span>
+            </div>
+        </header>
+
+        <div className="p-8 max-w-5xl mx-auto w-full z-10">
+          
+          {/* STEP 1: INPUT */}
+          {step === 1 && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl">
+                <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                    <span className="bg-indigo-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
+                    إدخال بيانات المنتج (AI Media Generator)
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                        <div>
+                            <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">اسم المنتج</label>
+                            <input 
+                                type="text" 
+                                placeholder="مثال: فستان صيفي أنيق / سماعات Pro"
+                                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                                value={product.name}
+                                onChange={(e) => setProduct({...product, name: e.target.value})}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">وصف المنتج والمميزات</label>
+                            <textarea 
+                                rows="5"
+                                placeholder="اكتب وصفاً مفصلاً للمنتج ومميزاته التنافسية..."
+                                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none"
+                                value={product.description}
+                                onChange={(e) => setProduct({...product, description: e.target.value})}
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">صورة المنتج الأساسية</label>
+                        <div 
+                            className={`border-2 border-dashed rounded-2xl flex flex-col items-center justify-center h-48 cursor-pointer transition-all ${product.imageUploaded ? 'border-emerald-500 bg-emerald-500/5' : 'border-slate-700 bg-slate-900 hover:border-indigo-500'}`}
+                            onClick={() => setProduct({...product, imageUploaded: true})}
+                        >
+                            {product.imageUploaded ? (
+                                <>
+                                    <CheckCircle2 className="text-emerald-500 mb-2" size={32} />
+                                    <span className="text-emerald-500 font-bold text-sm">تم رفع الصورة بنجاح</span>
+                                    <span className="text-emerald-500/70 text-xs mt-1">جاهزة للتحويل إلى ريلز أو كاروسيل</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Upload className="text-slate-500 mb-2" size={32} />
+                                    <span className="text-slate-400 font-bold text-sm">اضغط لرفع صورة المنتج</span>
+                                    <span className="text-slate-500 text-xs mt-1">سيقوم الـ AI ببناء فيديو وصور متعددة منها</span>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mt-8 flex justify-end">
+                    <button 
+                        onClick={handleAnalyze}
+                        disabled={!product.name || isAnalyzing}
+                        className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {isAnalyzing ? (
+                            <>جاري تحليل المنتج بـ AI... {progress}%</>
+                        ) : (
+                            <>تحليل المنتج (Analyze) <Play size={16} /></>
+                        )}
+                    </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 2: FRAMEWORK SELECTION */}
+          {step === 2 && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
+               <div className="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl">
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                        <span className="bg-indigo-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+                        Ad Framework Engine <span className="text-xs font-normal text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded ml-2">Smart Recommendation</span>
+                    </h3>
+                </div>
+                
+                <p className="text-slate-400 text-sm mb-6">بناءً على تحليل ذكاء الأعمال للمنتج <strong>({product.name})</strong>، قمنا باختيار النماذج الإعلانية الأكثر قدرة على التحويل (Conversion):</p>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    {frameworks.map((fw) => (
+                        <div 
+                            key={fw.id}
+                            onClick={() => setSelectedFramework(fw.id)}
+                            className={`p-5 rounded-xl border cursor-pointer transition-all relative overflow-hidden ${selectedFramework === fw.id ? 'border-indigo-500 bg-indigo-500/10 shadow-[0_0_15px_rgba(79,70,229,0.2)]' : 'border-slate-700 bg-slate-900 hover:border-slate-500'}`}
+                        >
+                            {selectedFramework === fw.id && <div className="absolute top-0 right-0 w-2 h-full bg-indigo-500"></div>}
+                            <div className="flex justify-between items-start mb-2">
+                                <h4 className="font-bold text-white">{fw.name}</h4>
+                                <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">Match: {fw.match}</span>
+                            </div>
+                            <p className="text-xs text-slate-400 leading-relaxed">{fw.desc}</p>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="flex justify-between items-center">
+                    <button onClick={() => setStep(1)} className="text-slate-400 hover:text-white text-sm font-bold">عودة</button>
+                    <button 
+                        onClick={handleGenerate}
+                        disabled={!selectedFramework}
+                        className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 transition-all disabled:opacity-50"
+                    >
+                        <Wand2 size={16} /> توليد المحتوى (ريلز + كاروسيل + نصوص)
+                    </button>
+                </div>
+               </div>
+            </div>
+          )}
+
+          {/* STEP 3: LOADING GENERATION */}
+          {step === 3 && (
+            <div className="flex flex-col items-center justify-center py-20 animate-in fade-in duration-300">
+                <div className="relative w-24 h-24 mb-6">
+                    <div className="absolute inset-0 border-t-4 border-indigo-500 rounded-full animate-spin"></div>
+                    <div className="absolute inset-2 border-r-4 border-purple-500 rounded-full animate-spin" style={{animationDirection: 'reverse'}}></div>
+                    <Wand2 className="absolute inset-0 m-auto text-indigo-400" size={32} />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">جاري توليد الحملة الشاملة...</h3>
+                <div className="text-slate-400 text-sm font-mono flex flex-col items-center gap-2 mt-4">
+                    <span>{'>'} صياغة 3 Hooks جذابة...</span>
+                    <span>{'>'} بناء سيناريو الفيديو (Script)...</span>
+                    <span className="text-indigo-400">{'>'} تحويل الصورة إلى (Video Reel) و (Carousel) احترافي...</span>
+                    <span className="text-emerald-400">{'>'} تجهيز الإعلان للجدولة التلقائية...</span>
+                </div>
+            </div>
+          )}
+
+          {/* STEP 4: RESULTS */}
+          {step === 4 && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-700">
+               <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
+                    <h3 className="text-2xl font-black text-white">نتائج محرك الذكاء الاصطناعي</h3>
+                    <div className="flex gap-3 w-full md:w-auto">
+                        <button className="flex-1 md:flex-none bg-slate-800 text-slate-300 border border-slate-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-700 transition-all flex justify-center items-center gap-2">
+                            <CheckCircle2 size={16} /> حفظ المشروع
+                        </button>
+                        <button 
+                            onClick={() => setShowScheduleModal(true)}
+                            className="flex-1 md:flex-none bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2 rounded-lg text-sm font-bold shadow-[0_0_15px_rgba(79,70,229,0.4)] hover:shadow-[0_0_25px_rgba(79,70,229,0.6)] transition-all flex justify-center items-center gap-2 transform hover:-translate-y-0.5"
+                        >
+                            <Calendar size={16} /> جدولة ونشر تلقائي بضغطة زر
+                        </button>
+                    </div>
+               </div>
+
+               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    {/* Left Col: Text Content */}
+                    <div className="lg:col-span-2 space-y-6">
+                        
+                        {/* Hooks */}
+                        <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl">
+                            <h4 className="font-bold text-indigo-400 flex items-center gap-2 mb-4">
+                                <MessageSquare size={18} /> الـ Hooks الإعلانية والنص (Copy)
+                            </h4>
+                            <div className="space-y-3">
+                                <div className="bg-slate-900 p-4 rounded-xl border border-slate-700 hover:border-indigo-500 transition-colors cursor-pointer group">
+                                    <p className="text-sm text-slate-200 group-hover:text-white">"اكتشف الأناقة التي تتحدث عن نفسها.. {product.name || 'تشكيلة الصيف الجديدة'} وصلت الآن! 🔥✨"</p>
+                                </div>
+                                <div className="bg-slate-900 p-4 rounded-xl border border-slate-700 hover:border-indigo-500 transition-colors cursor-pointer group">
+                                    <p className="text-sm text-slate-200 group-hover:text-white">"هل تبحث عن إطلالة تخطف الأنظار؟ لا تفوت خصم الـ 30% على القطع المحدودة. 👇"</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Video Script */}
+                        <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 bg-purple-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg">إستراتيجية PAS</div>
+                            <h4 className="font-bold text-purple-400 flex items-center gap-2 mb-4 mt-2">
+                                <Video size={18} /> سكربت الفيديو (Video Script)
+                            </h4>
+                            <div className="space-y-4 text-sm font-mono text-slate-300">
+                                <p><strong className="text-slate-100">[الثانية 0-2] Hook:</strong> انتقال سريع لعارضة ترتدي {product.name} بإضاءة درامية.</p>
+                                <p><strong className="text-slate-100">[الثانية 2-5] Agitate:</strong> زووم سريع على جودة القماش والتفاصيل.</p>
+                                <p><strong className="text-slate-100">[الثانية 5-10] Solution:</strong> عرض القطعة في مناسبات مختلفة (كاجوال / سهرة).</p>
+                                <p><strong className="text-slate-100">[الثانية 10-15] CTA:</strong> كود الخصم يظهر على الشاشة مع دعوة للضغط على الرابط.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Col: Generated Media (Tabs) */}
+                    <div className="space-y-6">
+                        <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl flex flex-col items-center h-full">
+                            
+                            {/* Media Tabs */}
+                            <div className="flex bg-slate-900 rounded-lg p-1 w-full mb-6 border border-slate-700">
+                                <button 
+                                    onClick={() => setMediaTab('video')}
+                                    className={`flex-1 py-2 text-xs font-bold rounded-md flex justify-center items-center gap-1 transition-all ${mediaTab === 'video' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}
+                                >
+                                    <Film size={14} /> فيديو Reel
+                                </button>
+                                <button 
+                                    onClick={() => setMediaTab('carousel')}
+                                    className={`flex-1 py-2 text-xs font-bold rounded-md flex justify-center items-center gap-1 transition-all ${mediaTab === 'carousel' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}
+                                >
+                                    <Layers size={14} /> كاروسيل
+                                </button>
+                                <button 
+                                    onClick={() => setMediaTab('image')}
+                                    className={`flex-1 py-2 text-xs font-bold rounded-md flex justify-center items-center gap-1 transition-all ${mediaTab === 'image' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}
+                                >
+                                    <ImageIcon size={14} /> صورة
+                                </button>
+                            </div>
+
+                            {/* Video Reel Content */}
+                            {mediaTab === 'video' && (
+                                <div className="relative w-full max-w-[240px] aspect-[9/16] rounded-xl overflow-hidden shadow-2xl border border-slate-600 group mx-auto bg-slate-900">
+                                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=600" alt="Generated Reel" className="w-full h-full object-cover opacity-80" />
+                                    <div className="absolute inset-0 bg-slate-900/30 flex items-center justify-center group-hover:bg-slate-900/50 transition-all">
+                                        <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 cursor-pointer hover:scale-110 transition-transform shadow-[0_0_30px_rgba(79,70,229,0.5)]">
+                                            <Play className="text-white ml-1" fill="white" size={24} />
+                                        </div>
+                                    </div>
+                                    <div className="absolute bottom-4 left-4 right-4">
+                                        <div className="bg-black/60 backdrop-blur-sm p-3 rounded-lg border border-white/10">
+                                            <p className="text-white text-xs font-bold mb-1">{product.name || 'إعلان الفيديو'}</p>
+                                            <p className="text-indigo-300 text-[10px]">#موضة #أناقة</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Carousel Content */}
+                            {mediaTab === 'carousel' && (
+                                <div className="relative w-full aspect-square rounded-xl overflow-hidden shadow-2xl border border-slate-600 bg-slate-900 flex items-center justify-center">
+                                    <div className="absolute inset-0 flex transition-transform duration-500 transform translate-x-4 opacity-50 blur-sm">
+                                        <img src="https://images.unsplash.com/photo-1434389678278-be4d41a6b8e8?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover rounded-xl" />
+                                    </div>
+                                    <div className="relative z-10 w-5/6 aspect-square rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.8)] border-2 border-indigo-500">
+                                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover" />
+                                        <div className="absolute bottom-0 w-full bg-gradient-to-t from-slate-900 to-transparent p-4">
+                                            <p className="text-white font-bold text-sm">مميزات المنتج (1/3)</p>
+                                        </div>
+                                    </div>
+                                    <div className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur rounded-full flex items-center justify-center cursor-pointer hover:bg-white/30 text-white">
+                                        {'>'}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Image Content */}
+                            {mediaTab === 'image' && (
+                                <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden shadow-2xl border border-slate-600 group">
+                                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=600" alt="Generated Ad" className="w-full h-full object-cover" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent flex flex-col justify-end p-6">
+                                        <span className="bg-red-600 text-white text-[10px] font-black px-2 py-1 uppercase w-max mb-2 rounded shadow">عرض محدود</span>
+                                        <h5 className="text-white font-black text-xl leading-tight text-shadow-md">{product.name || 'تشكيلة الموسم'}</h5>
+                                    </div>
+                                </div>
+                            )}
+                            
+                            <p className="text-[10px] text-slate-500 mt-4 text-center">
+                                {mediaTab === 'video' ? 'تم إنشاء الفيديو آلياً باستخدام Image-to-Video AI' : 
+                                 mediaTab === 'carousel' ? 'تم توليد سلسلة صور كاروسيل تفاعلية' : 
+                                 'تم الإنشاء ديناميكياً عبر تقنية HTML-to-Image'}
+                            </p>
+                        </div>
+                    </div>
+               </div>
+            </div>
+          )}
+
+        </div>
+      </main>
+
+      {/* Auto-Publishing Modal (GHL / Grow50x OS Simulation) */}
+      {showScheduleModal && (
+        <div className="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-50 flex items-center justify-center animate-in fade-in duration-200">
+            <div className="bg-slate-900 border border-slate-700 w-full max-w-lg rounded-2xl p-6 shadow-2xl relative">
+                <button onClick={() => setShowScheduleModal(false)} className="absolute top-4 right-4 text-slate-500 hover:text-white">✕</button>
+                
+                <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                    <Share2 className="text-indigo-500" /> الجدولة والنشر التلقائي
+                </h3>
+                <p className="text-xs text-slate-400 mb-6">سيتم إرسال الحملة فوراً إلى الـ Social Planner الخاص بك.</p>
+                
+                <div className="space-y-4">
+                    <div className="bg-slate-800 p-4 rounded-xl border border-slate-700 flex gap-4 items-center">
+                        <div className="w-12 h-16 bg-slate-900 rounded border border-slate-600 flex-shrink-0 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=200" alt="thumb" className="w-full h-full object-cover opacity-80" />
+                            <div className="absolute inset-0 flex items-center justify-center"><Play size={12} className="text-white" fill="white"/></div>
+                        </div>
+                        <div className="flex-1">
+                            <p className="text-sm font-bold text-white">{product.name || 'حملة إعلانية'}</p>
+                            <p className="text-xs text-slate-400 line-clamp-1">اكتشف الأناقة التي تتحدث عن نفسها...</p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase">تاريخ النشر</label>
+                            <input type="date" className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500" />
+                        </div>
+                        <div>
+                            <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase">الوقت</label>
+                            <input type="time" className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-[10px] font-bold text-slate-400 mb-2 uppercase">المنصات المستهدفة</label>
+                        <div className="flex gap-3">
+                            <label className="flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 px-3 py-2 rounded-lg cursor-pointer">
+                                <input type="checkbox" defaultChecked className="accent-indigo-500" />
+                                <span className="text-xs font-bold text-indigo-400">Instagram</span>
+                            </label>
+                            <label className="flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 px-3 py-2 rounded-lg cursor-pointer">
+                                <input type="checkbox" defaultChecked className="accent-blue-500" />
+                                <span className="text-xs font-bold text-blue-400">Facebook</span>
+                            </label>
+                            <label className="flex items-center gap-2 bg-slate-800 border border-slate-700 px-3 py-2 rounded-lg cursor-pointer">
+                                <input type="checkbox" className="accent-slate-500" />
+                                <span className="text-xs font-bold text-slate-400">TikTok</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mt-8">
+                    <button className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg flex justify-center items-center gap-2">
+                        <Calendar size={18} /> تأكيد الجدولة في الـ Planner
+                    </button>
+                    <p className="text-[9px] text-center text-slate-500 mt-3 font-mono">Powered by GHL / Grow50x API integration</p>
+                </div>
+            </div>
+        </div>
+      )}
+
+    </div>
+  );
+}
