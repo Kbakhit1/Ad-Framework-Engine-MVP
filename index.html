@@ -1,15 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Upload, ImageIcon, FileText, Settings, Wand2, Play, CheckCircle2, Layout, Video, MessageSquare, Film, Calendar, Share2, Layers } from 'lucide-react';
+import React, { useState } from 'react';
+
+// --- Icons Definitions (Inline SVGs for standalone compatibility) ---
+const Wand2 = ({ size = 18, className = "" }) => <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z" /><path d="m14 7 3 3" /><path d="M5 6v4" /><path d="M19 14v4" /><path d="M10 2v2" /><path d="M7 8H3" /><path d="M21 16h-4" /><path d="M11 3H9" /></svg>;
+const Layout = ({ size = 18, className = "" }) => <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><line x1="3" x2="21" y1="9" y2="9" /><line x1="9" x2="9" y1="21" y2="9" /></svg>;
+const Calendar = ({ size = 18, className = "" }) => <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line x1="16" x2="16" y1="2" y2="6" /><line x1="8" x2="8" y1="2" y2="6" /><line x1="3" x2="21" y1="10" y2="10" /></svg>;
+const Settings = ({ size = 18, className = "" }) => <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></svg>;
+const Upload = ({ size = 18, className = "" }) => <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" x2="12" y1="3" y2="15" /></svg>;
+const CheckCircle2 = ({ size = 18, className = "" }) => <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" /><path d="m9 12 2 2 4-4" /></svg>;
+const Play = ({ size = 18, className = "", fill = "none" }) => <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3" /></svg>;
+const MessageSquare = ({ size = 18, className = "" }) => <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>;
+const Video = ({ size = 18, className = "" }) => <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 8-6 4 6 4V8Z" /><rect width="14" height="12" x="2" y="6" rx="2" ry="2" /></svg>;
+const Film = ({ size = 18, className = "" }) => <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M7 3v18" /><path d="M3 7.5h4" /><path d="M3 12h18" /><path d="M3 16.5h4" /><path d="M17 3v18" /><path d="M17 7.5h4" /><path d="M17 16.5h4" /></svg>;
+const Layers = ({ size = 18, className = "" }) => <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2" /><polyline points="2 17 12 22 22 17" /><polyline points="2 12 12 17 22 12" /></svg>;
+const ImageIcon = ({ size = 18, className = "" }) => <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>;
+const Share2 = ({ size = 18, className = "" }) => <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /><line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></svg>;
 
 export default function App() {
   const [step, setStep] = useState(1);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [selectedFramework, setSelectedFramework] = useState(null);
-  const [mediaTab, setMediaTab] = useState('video'); // 'image', 'video', or 'carousel'
+  const [mediaTab, setMediaTab] = useState('video');
   const [showScheduleModal, setShowScheduleModal] = useState(false);
 
-  // Fake Product Data
   const [product, setProduct] = useState({
     name: '',
     description: '',
@@ -32,133 +45,145 @@ export default function App() {
       if (currentProgress >= 100) {
         clearInterval(interval);
         setIsAnalyzing(false);
-        setStep(2); // Go to Framework Selection
+        setStep(2);
       }
     }, 100);
   };
 
   const handleGenerate = () => {
-    setStep(3); // Show loading generation
+    setStep(3);
     setTimeout(() => {
-      setStep(4); // Show Results
+      setStep(4);
     }, 2500);
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-200 font-sans flex overflow-hidden">
+    <div dir="rtl" className="min-h-screen bg-slate-900 text-slate-200 font-sans flex overflow-hidden" style={{ fontFamily: "'Tajawal', sans-serif" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 4px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideRight { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        .animate-slide-up { animation: slideUp 0.5s ease-out forwards; }
+        .animate-slide-right { animation: slideRight 0.5s ease-out forwards; }
+      `}</style>
       
       {/* Sidebar */}
-      <aside className="w-64 bg-slate-950 border-r border-slate-800 flex flex-col hidden md:flex">
+      <aside className="w-64 bg-slate-950 border-l border-slate-800 flex flex-col hidden md:flex">
         <div className="p-6 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-black text-white shadow-lg shadow-indigo-500/20">A</div>
-            <div>
-                <h1 className="font-black text-lg tracking-wide text-white">Ad<span className="text-indigo-400">Engine</span></h1>
-                <p className="text-[9px] text-slate-500 uppercase tracking-widest font-mono">SaaS MVP v2.5 (Reels & Carousel)</p>
-            </div>
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-black text-white shadow-lg shadow-indigo-500/20">A</div>
+          <div>
+            <h1 className="font-black text-lg tracking-wide text-white">Ad<span className="text-indigo-400">Engine</span></h1>
+            <p className="text-[9px] text-slate-500 uppercase tracking-widest font-mono">SaaS MVP v2.5 (Reels & Carousel)</p>
+          </div>
         </div>
         <nav className="flex-1 px-4 py-4 space-y-2">
-            <button className="w-full flex items-center gap-3 bg-indigo-500/10 text-indigo-400 px-4 py-3 rounded-xl font-bold border border-indigo-500/20 transition-all">
-                <Wand2 size={18} /> إنشاء إعلان جديد
-            </button>
-            <button className="w-full flex items-center gap-3 text-slate-400 hover:text-white hover:bg-slate-900 px-4 py-3 rounded-xl font-medium transition-all">
-                <Layout size={18} /> مشاريعي (Dashboard)
-            </button>
-            <button className="w-full flex items-center gap-3 text-slate-400 hover:text-white hover:bg-slate-900 px-4 py-3 rounded-xl font-medium transition-all">
-                <Calendar size={18} /> الجدولة والنشر (Planner)
-            </button>
-            <button className="w-full flex items-center gap-3 text-slate-400 hover:text-white hover:bg-slate-900 px-4 py-3 rounded-xl font-medium transition-all">
-                <Settings size={18} /> إعدادات الذكاء الاصطناعي
-            </button>
+          <button className="w-full flex items-center gap-3 bg-indigo-500/10 text-indigo-400 px-4 py-3 rounded-xl font-bold border border-indigo-500/20 transition-all">
+            <Wand2 size={18} /> إنشاء إعلان جديد
+          </button>
+          <button className="w-full flex items-center gap-3 text-slate-400 hover:text-white hover:bg-slate-900 px-4 py-3 rounded-xl font-medium transition-all">
+            <Layout size={18} /> مشاريعي (Dashboard)
+          </button>
+          <button className="w-full flex items-center gap-3 text-slate-400 hover:text-white hover:bg-slate-900 px-4 py-3 rounded-xl font-medium transition-all">
+            <Calendar size={18} /> الجدولة والنشر (Planner)
+          </button>
+          <button className="w-full flex items-center gap-3 text-slate-400 hover:text-white hover:bg-slate-900 px-4 py-3 rounded-xl font-medium transition-all">
+            <Settings size={18} /> إعدادات الذكاء الاصطناعي
+          </button>
         </nav>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col relative overflow-y-auto">
+      <main className="flex-1 flex flex-col relative overflow-y-auto custom-scrollbar">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
-        
+
         <header className="p-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-10 flex justify-between items-center">
-            <div>
-                <h2 className="text-2xl font-bold text-white">Ad Framework Engine</h2>
-                <p className="text-sm text-slate-400">من الصورة إلى ريلز وكاروسيل مجدول تلقائياً</p>
-            </div>
-            <div className="flex gap-2">
-                <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    API Connected
-                </span>
-            </div>
+          <div>
+            <h2 className="text-2xl font-bold text-white">Ad Framework Engine</h2>
+            <p className="text-sm text-slate-400">من الصورة إلى ريلز وكاروسيل مجدول تلقائياً</p>
+          </div>
+          <div className="flex gap-2">
+            <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              API Connected
+            </span>
+          </div>
         </header>
 
         <div className="p-8 max-w-5xl mx-auto w-full z-10">
-          
+
           {/* STEP 1: INPUT */}
           {step === 1 && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="space-y-6 animate-slide-up">
               <div className="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl">
                 <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
-                    <span className="bg-indigo-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
-                    إدخال بيانات المنتج (AI Media Generator)
+                  <span className="bg-indigo-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
+                  إدخال بيانات المنتج (AI Media Generator)
                 </h3>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">اسم المنتج</label>
-                            <input 
-                                type="text" 
-                                placeholder="مثال: فستان صيفي أنيق / سماعات Pro"
-                                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
-                                value={product.name}
-                                onChange={(e) => setProduct({...product, name: e.target.value})}
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">وصف المنتج والمميزات</label>
-                            <textarea 
-                                rows="5"
-                                placeholder="اكتب وصفاً مفصلاً للمنتج ومميزاته التنافسية..."
-                                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none"
-                                value={product.description}
-                                onChange={(e) => setProduct({...product, description: e.target.value})}
-                            ></textarea>
-                        </div>
-                    </div>
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-4">
                     <div>
-                        <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">صورة المنتج الأساسية</label>
-                        <div 
-                            className={`border-2 border-dashed rounded-2xl flex flex-col items-center justify-center h-48 cursor-pointer transition-all ${product.imageUploaded ? 'border-emerald-500 bg-emerald-500/5' : 'border-slate-700 bg-slate-900 hover:border-indigo-500'}`}
-                            onClick={() => setProduct({...product, imageUploaded: true})}
-                        >
-                            {product.imageUploaded ? (
-                                <>
-                                    <CheckCircle2 className="text-emerald-500 mb-2" size={32} />
-                                    <span className="text-emerald-500 font-bold text-sm">تم رفع الصورة بنجاح</span>
-                                    <span className="text-emerald-500/70 text-xs mt-1">جاهزة للتحويل إلى ريلز أو كاروسيل</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Upload className="text-slate-500 mb-2" size={32} />
-                                    <span className="text-slate-400 font-bold text-sm">اضغط لرفع صورة المنتج</span>
-                                    <span className="text-slate-500 text-xs mt-1">سيقوم الـ AI ببناء فيديو وصور متعددة منها</span>
-                                </>
-                            )}
-                        </div>
+                      <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">اسم المنتج</label>
+                      <input
+                        type="text"
+                        placeholder="مثال: فستان صيفي أنيق / سماعات Pro"
+                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                        value={product.name}
+                        onChange={(e) => setProduct({ ...product, name: e.target.value })}
+                      />
                     </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">وصف المنتج والمميزات</label>
+                      <textarea
+                        rows="5"
+                        placeholder="اكتب وصفاً مفصلاً للمنتج ومميزاته التنافسية..."
+                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none custom-scrollbar"
+                        value={product.description}
+                        onChange={(e) => setProduct({ ...product, description: e.target.value })}
+                      ></textarea>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">صورة المنتج الأساسية</label>
+                    <div
+                      className={`border-2 border-dashed rounded-2xl flex flex-col items-center justify-center h-48 cursor-pointer transition-all ${product.imageUploaded ? 'border-emerald-500 bg-emerald-500/5' : 'border-slate-700 bg-slate-900 hover:border-indigo-500'}`}
+                      onClick={() => setProduct({ ...product, imageUploaded: true })}
+                    >
+                      {product.imageUploaded ? (
+                        <React.Fragment>
+                          <CheckCircle2 className="text-emerald-500 mb-2" size={32} />
+                          <span className="text-emerald-500 font-bold text-sm">تم رفع الصورة بنجاح</span>
+                          <span className="text-emerald-500/70 text-xs mt-1">جاهزة للتحويل إلى ريلز أو كاروسيل</span>
+                        </React.Fragment>
+                      ) : (
+                        <React.Fragment>
+                          <Upload className="text-slate-500 mb-2" size={32} />
+                          <span className="text-slate-400 font-bold text-sm">اضغط لرفع صورة المنتج</span>
+                          <span className="text-slate-500 text-xs mt-1">سيقوم الـ AI ببناء فيديو وصور متعددة منها</span>
+                        </React.Fragment>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
                 <div className="mt-8 flex justify-end">
-                    <button 
-                        onClick={handleAnalyze}
-                        disabled={!product.name || isAnalyzing}
-                        className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {isAnalyzing ? (
-                            <>جاري تحليل المنتج بـ AI... {progress}%</>
-                        ) : (
-                            <>تحليل المنتج (Analyze) <Play size={16} /></>
-                        )}
-                    </button>
+                  <button
+                    onClick={handleAnalyze}
+                    disabled={!product.name || isAnalyzing}
+                    className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isAnalyzing ? (
+                      <React.Fragment>جاري تحليل المنتج بـ AI... {progress}%</React.Fragment>
+                    ) : (
+                      <React.Fragment>تحليل المنتج (Analyze) <Play size={16} /></React.Fragment>
+                    )}
+                  </button>
                 </div>
               </div>
             </div>
@@ -166,266 +191,266 @@ export default function App() {
 
           {/* STEP 2: FRAMEWORK SELECTION */}
           {step === 2 && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
-               <div className="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl">
+            <div className="space-y-6 animate-slide-right">
+              <div className="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl">
                 <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                        <span className="bg-indigo-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
-                        Ad Framework Engine <span className="text-xs font-normal text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded ml-2">Smart Recommendation</span>
-                    </h3>
+                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <span className="bg-indigo-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+                    Ad Framework Engine <span className="text-xs font-normal text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded mr-2">Smart Recommendation</span>
+                  </h3>
                 </div>
-                
+
                 <p className="text-slate-400 text-sm mb-6">بناءً على تحليل ذكاء الأعمال للمنتج <strong>({product.name})</strong>، قمنا باختيار النماذج الإعلانية الأكثر قدرة على التحويل (Conversion):</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                    {frameworks.map((fw) => (
-                        <div 
-                            key={fw.id}
-                            onClick={() => setSelectedFramework(fw.id)}
-                            className={`p-5 rounded-xl border cursor-pointer transition-all relative overflow-hidden ${selectedFramework === fw.id ? 'border-indigo-500 bg-indigo-500/10 shadow-[0_0_15px_rgba(79,70,229,0.2)]' : 'border-slate-700 bg-slate-900 hover:border-slate-500'}`}
-                        >
-                            {selectedFramework === fw.id && <div className="absolute top-0 right-0 w-2 h-full bg-indigo-500"></div>}
-                            <div className="flex justify-between items-start mb-2">
-                                <h4 className="font-bold text-white">{fw.name}</h4>
-                                <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">Match: {fw.match}</span>
-                            </div>
-                            <p className="text-xs text-slate-400 leading-relaxed">{fw.desc}</p>
-                        </div>
-                    ))}
+                  {frameworks.map((fw) => (
+                    <div
+                      key={fw.id}
+                      onClick={() => setSelectedFramework(fw.id)}
+                      className={`p-5 rounded-xl border cursor-pointer transition-all relative overflow-hidden ${selectedFramework === fw.id ? 'border-indigo-500 bg-indigo-500/10 shadow-[0_0_15px_rgba(79,70,229,0.2)]' : 'border-slate-700 bg-slate-900 hover:border-slate-500'}`}
+                    >
+                      {selectedFramework === fw.id && <div className="absolute top-0 left-0 w-2 h-full bg-indigo-500"></div>}
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-bold text-white">{fw.name}</h4>
+                        <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">Match: {fw.match}</span>
+                      </div>
+                      <p className="text-xs text-slate-400 leading-relaxed">{fw.desc}</p>
+                    </div>
+                  ))}
                 </div>
 
                 <div className="flex justify-between items-center">
-                    <button onClick={() => setStep(1)} className="text-slate-400 hover:text-white text-sm font-bold">عودة</button>
-                    <button 
-                        onClick={handleGenerate}
-                        disabled={!selectedFramework}
-                        className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 transition-all disabled:opacity-50"
-                    >
-                        <Wand2 size={16} /> توليد المحتوى (ريلز + كاروسيل + نصوص)
-                    </button>
+                  <button onClick={() => setStep(1)} className="text-slate-400 hover:text-white text-sm font-bold">عودة</button>
+                  <button
+                    onClick={handleGenerate}
+                    disabled={!selectedFramework}
+                    className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 transition-all disabled:opacity-50"
+                  >
+                    <Wand2 size={16} /> توليد المحتوى (ريلز + كاروسيل + نصوص)
+                  </button>
                 </div>
-               </div>
+              </div>
             </div>
           )}
 
           {/* STEP 3: LOADING GENERATION */}
           {step === 3 && (
-            <div className="flex flex-col items-center justify-center py-20 animate-in fade-in duration-300">
-                <div className="relative w-24 h-24 mb-6">
-                    <div className="absolute inset-0 border-t-4 border-indigo-500 rounded-full animate-spin"></div>
-                    <div className="absolute inset-2 border-r-4 border-purple-500 rounded-full animate-spin" style={{animationDirection: 'reverse'}}></div>
-                    <Wand2 className="absolute inset-0 m-auto text-indigo-400" size={32} />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">جاري توليد الحملة الشاملة...</h3>
-                <div className="text-slate-400 text-sm font-mono flex flex-col items-center gap-2 mt-4">
-                    <span>{'>'} صياغة 3 Hooks جذابة...</span>
-                    <span>{'>'} بناء سيناريو الفيديو (Script)...</span>
-                    <span className="text-indigo-400">{'>'} تحويل الصورة إلى (Video Reel) و (Carousel) احترافي...</span>
-                    <span className="text-emerald-400">{'>'} تجهيز الإعلان للجدولة التلقائية...</span>
-                </div>
+            <div className="flex flex-col items-center justify-center py-20 animate-fade-in">
+              <div className="relative w-24 h-24 mb-6">
+                <div className="absolute inset-0 border-t-4 border-indigo-500 rounded-full animate-spin"></div>
+                <div className="absolute inset-2 border-l-4 border-purple-500 rounded-full animate-spin" style={{ animationDirection: 'reverse' }}></div>
+                <Wand2 className="absolute inset-0 m-auto text-indigo-400" size={32} />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">جاري توليد الحملة الشاملة...</h3>
+              <div className="text-slate-400 text-sm font-mono flex flex-col items-center gap-2 mt-4" dir="ltr">
+                <span>&gt; صياغة 3 Hooks جذابة...</span>
+                <span>&gt; بناء سيناريو الفيديو (Script)...</span>
+                <span className="text-indigo-400">&gt; تحويل الصورة إلى (Video Reel) و (Carousel) احترافي...</span>
+                <span className="text-emerald-400">&gt; تجهيز الإعلان للجدولة التلقائية...</span>
+              </div>
             </div>
           )}
 
           {/* STEP 4: RESULTS */}
           {step === 4 && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-700">
-               <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
-                    <h3 className="text-2xl font-black text-white">نتائج محرك الذكاء الاصطناعي</h3>
-                    <div className="flex gap-3 w-full md:w-auto">
-                        <button className="flex-1 md:flex-none bg-slate-800 text-slate-300 border border-slate-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-700 transition-all flex justify-center items-center gap-2">
-                            <CheckCircle2 size={16} /> حفظ المشروع
-                        </button>
-                        <button 
-                            onClick={() => setShowScheduleModal(true)}
-                            className="flex-1 md:flex-none bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2 rounded-lg text-sm font-bold shadow-[0_0_15px_rgba(79,70,229,0.4)] hover:shadow-[0_0_25px_rgba(79,70,229,0.6)] transition-all flex justify-center items-center gap-2 transform hover:-translate-y-0.5"
-                        >
-                            <Calendar size={16} /> جدولة ونشر تلقائي بضغطة زر
-                        </button>
+            <div className="space-y-6 animate-slide-up">
+              <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
+                <h3 className="text-2xl font-black text-white">نتائج محرك الذكاء الاصطناعي</h3>
+                <div className="flex gap-3 w-full md:w-auto">
+                  <button className="flex-1 md:flex-none bg-slate-800 text-slate-300 border border-slate-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-700 transition-all flex justify-center items-center gap-2">
+                    <CheckCircle2 size={16} /> حفظ المشروع
+                  </button>
+                  <button
+                    onClick={() => setShowScheduleModal(true)}
+                    className="flex-1 md:flex-none bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2 rounded-lg text-sm font-bold shadow-[0_0_15px_rgba(79,70,229,0.4)] hover:shadow-[0_0_25px_rgba(79,70,229,0.6)] transition-all flex justify-center items-center gap-2 transform hover:-translate-y-0.5"
+                  >
+                    <Calendar size={16} /> جدولة ونشر تلقائي بضغطة زر
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                {/* Left Col: Text Content */}
+                <div className="lg:col-span-2 space-y-6">
+
+                  {/* Hooks */}
+                  <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl">
+                    <h4 className="font-bold text-indigo-400 flex items-center gap-2 mb-4">
+                      <MessageSquare size={18} /> الـ Hooks الإعلانية والنص (Copy)
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="bg-slate-900 p-4 rounded-xl border border-slate-700 hover:border-indigo-500 transition-colors cursor-pointer group">
+                        <p className="text-sm text-slate-200 group-hover:text-white">"اكتشف الأناقة التي تتحدث عن نفسها.. {product.name || 'تشكيلة الصيف الجديدة'} وصلت الآن! 🔥✨"</p>
+                      </div>
+                      <div className="bg-slate-900 p-4 rounded-xl border border-slate-700 hover:border-indigo-500 transition-colors cursor-pointer group">
+                        <p className="text-sm text-slate-200 group-hover:text-white">"هل تبحث عن إطلالة تخطف الأنظار؟ لا تفوت خصم الـ 30% على القطع المحدودة. 👇"</p>
+                      </div>
                     </div>
-               </div>
+                  </div>
 
-               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    
-                    {/* Left Col: Text Content */}
-                    <div className="lg:col-span-2 space-y-6">
-                        
-                        {/* Hooks */}
-                        <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl">
-                            <h4 className="font-bold text-indigo-400 flex items-center gap-2 mb-4">
-                                <MessageSquare size={18} /> الـ Hooks الإعلانية والنص (Copy)
-                            </h4>
-                            <div className="space-y-3">
-                                <div className="bg-slate-900 p-4 rounded-xl border border-slate-700 hover:border-indigo-500 transition-colors cursor-pointer group">
-                                    <p className="text-sm text-slate-200 group-hover:text-white">"اكتشف الأناقة التي تتحدث عن نفسها.. {product.name || 'تشكيلة الصيف الجديدة'} وصلت الآن! 🔥✨"</p>
-                                </div>
-                                <div className="bg-slate-900 p-4 rounded-xl border border-slate-700 hover:border-indigo-500 transition-colors cursor-pointer group">
-                                    <p className="text-sm text-slate-200 group-hover:text-white">"هل تبحث عن إطلالة تخطف الأنظار؟ لا تفوت خصم الـ 30% على القطع المحدودة. 👇"</p>
-                                </div>
-                            </div>
-                        </div>
+                  {/* Video Script */}
+                  <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl relative overflow-hidden">
+                    <div className="absolute top-0 left-0 bg-purple-600 text-white text-[10px] font-bold px-3 py-1 rounded-br-lg">إستراتيجية PAS</div>
+                    <h4 className="font-bold text-purple-400 flex items-center gap-2 mb-4 mt-2">
+                      <Video size={18} /> سكربت الفيديو (Video Script)
+                    </h4>
+                    <div className="space-y-4 text-sm font-mono text-slate-300">
+                      <p><strong className="text-slate-100">[الثانية 0-2] Hook:</strong> انتقال سريع لعارضة ترتدي {product.name || 'المنتج'} بإضاءة درامية.</p>
+                      <p><strong className="text-slate-100">[الثانية 2-5] Agitate:</strong> زووم سريع على جودة القماش والتفاصيل.</p>
+                      <p><strong className="text-slate-100">[الثانية 5-10] Solution:</strong> عرض القطعة في مناسبات مختلفة (كاجوال / سهرة).</p>
+                      <p><strong className="text-slate-100">[الثانية 10-15] CTA:</strong> كود الخصم يظهر على الشاشة مع دعوة للضغط على الرابط.</p>
+                    </div>
+                  </div>
+                </div>
 
-                        {/* Video Script */}
-                        <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl relative overflow-hidden">
-                            <div className="absolute top-0 right-0 bg-purple-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg">إستراتيجية PAS</div>
-                            <h4 className="font-bold text-purple-400 flex items-center gap-2 mb-4 mt-2">
-                                <Video size={18} /> سكربت الفيديو (Video Script)
-                            </h4>
-                            <div className="space-y-4 text-sm font-mono text-slate-300">
-                                <p><strong className="text-slate-100">[الثانية 0-2] Hook:</strong> انتقال سريع لعارضة ترتدي {product.name} بإضاءة درامية.</p>
-                                <p><strong className="text-slate-100">[الثانية 2-5] Agitate:</strong> زووم سريع على جودة القماش والتفاصيل.</p>
-                                <p><strong className="text-slate-100">[الثانية 5-10] Solution:</strong> عرض القطعة في مناسبات مختلفة (كاجوال / سهرة).</p>
-                                <p><strong className="text-slate-100">[الثانية 10-15] CTA:</strong> كود الخصم يظهر على الشاشة مع دعوة للضغط على الرابط.</p>
-                            </div>
-                        </div>
+                {/* Right Col: Generated Media (Tabs) */}
+                <div className="space-y-6">
+                  <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl flex flex-col items-center h-full">
+
+                    {/* Media Tabs */}
+                    <div className="flex bg-slate-900 rounded-lg p-1 w-full mb-6 border border-slate-700">
+                      <button
+                        onClick={() => setMediaTab('video')}
+                        className={`flex-1 py-2 text-[10px] sm:text-xs font-bold rounded-md flex justify-center items-center gap-1 transition-all ${mediaTab === 'video' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}
+                      >
+                        <Film size={14} /> فيديو Reel
+                      </button>
+                      <button
+                        onClick={() => setMediaTab('carousel')}
+                        className={`flex-1 py-2 text-[10px] sm:text-xs font-bold rounded-md flex justify-center items-center gap-1 transition-all ${mediaTab === 'carousel' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}
+                      >
+                        <Layers size={14} /> كاروسيل
+                      </button>
+                      <button
+                        onClick={() => setMediaTab('image')}
+                        className={`flex-1 py-2 text-[10px] sm:text-xs font-bold rounded-md flex justify-center items-center gap-1 transition-all ${mediaTab === 'image' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}
+                      >
+                        <ImageIcon size={14} /> صورة
+                      </button>
                     </div>
 
-                    {/* Right Col: Generated Media (Tabs) */}
-                    <div className="space-y-6">
-                        <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl flex flex-col items-center h-full">
-                            
-                            {/* Media Tabs */}
-                            <div className="flex bg-slate-900 rounded-lg p-1 w-full mb-6 border border-slate-700">
-                                <button 
-                                    onClick={() => setMediaTab('video')}
-                                    className={`flex-1 py-2 text-xs font-bold rounded-md flex justify-center items-center gap-1 transition-all ${mediaTab === 'video' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}
-                                >
-                                    <Film size={14} /> فيديو Reel
-                                </button>
-                                <button 
-                                    onClick={() => setMediaTab('carousel')}
-                                    className={`flex-1 py-2 text-xs font-bold rounded-md flex justify-center items-center gap-1 transition-all ${mediaTab === 'carousel' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}
-                                >
-                                    <Layers size={14} /> كاروسيل
-                                </button>
-                                <button 
-                                    onClick={() => setMediaTab('image')}
-                                    className={`flex-1 py-2 text-xs font-bold rounded-md flex justify-center items-center gap-1 transition-all ${mediaTab === 'image' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}
-                                >
-                                    <ImageIcon size={14} /> صورة
-                                </button>
-                            </div>
-
-                            {/* Video Reel Content */}
-                            {mediaTab === 'video' && (
-                                <div className="relative w-full max-w-[240px] aspect-[9/16] rounded-xl overflow-hidden shadow-2xl border border-slate-600 group mx-auto bg-slate-900">
-                                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=600" alt="Generated Reel" className="w-full h-full object-cover opacity-80" />
-                                    <div className="absolute inset-0 bg-slate-900/30 flex items-center justify-center group-hover:bg-slate-900/50 transition-all">
-                                        <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 cursor-pointer hover:scale-110 transition-transform shadow-[0_0_30px_rgba(79,70,229,0.5)]">
-                                            <Play className="text-white ml-1" fill="white" size={24} />
-                                        </div>
-                                    </div>
-                                    <div className="absolute bottom-4 left-4 right-4">
-                                        <div className="bg-black/60 backdrop-blur-sm p-3 rounded-lg border border-white/10">
-                                            <p className="text-white text-xs font-bold mb-1">{product.name || 'إعلان الفيديو'}</p>
-                                            <p className="text-indigo-300 text-[10px]">#موضة #أناقة</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Carousel Content */}
-                            {mediaTab === 'carousel' && (
-                                <div className="relative w-full aspect-square rounded-xl overflow-hidden shadow-2xl border border-slate-600 bg-slate-900 flex items-center justify-center">
-                                    <div className="absolute inset-0 flex transition-transform duration-500 transform translate-x-4 opacity-50 blur-sm">
-                                        <img src="https://images.unsplash.com/photo-1434389678278-be4d41a6b8e8?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover rounded-xl" />
-                                    </div>
-                                    <div className="relative z-10 w-5/6 aspect-square rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.8)] border-2 border-indigo-500">
-                                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover" />
-                                        <div className="absolute bottom-0 w-full bg-gradient-to-t from-slate-900 to-transparent p-4">
-                                            <p className="text-white font-bold text-sm">مميزات المنتج (1/3)</p>
-                                        </div>
-                                    </div>
-                                    <div className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur rounded-full flex items-center justify-center cursor-pointer hover:bg-white/30 text-white">
-                                        {'>'}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Image Content */}
-                            {mediaTab === 'image' && (
-                                <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden shadow-2xl border border-slate-600 group">
-                                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=600" alt="Generated Ad" className="w-full h-full object-cover" />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent flex flex-col justify-end p-6">
-                                        <span className="bg-red-600 text-white text-[10px] font-black px-2 py-1 uppercase w-max mb-2 rounded shadow">عرض محدود</span>
-                                        <h5 className="text-white font-black text-xl leading-tight text-shadow-md">{product.name || 'تشكيلة الموسم'}</h5>
-                                    </div>
-                                </div>
-                            )}
-                            
-                            <p className="text-[10px] text-slate-500 mt-4 text-center">
-                                {mediaTab === 'video' ? 'تم إنشاء الفيديو آلياً باستخدام Image-to-Video AI' : 
-                                 mediaTab === 'carousel' ? 'تم توليد سلسلة صور كاروسيل تفاعلية' : 
-                                 'تم الإنشاء ديناميكياً عبر تقنية HTML-to-Image'}
-                            </p>
+                    {/* Video Reel Content */}
+                    {mediaTab === 'video' && (
+                      <div className="relative w-full max-w-[240px] aspect-[9/16] rounded-xl overflow-hidden shadow-2xl border border-slate-600 group mx-auto bg-slate-900">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=600" alt="Generated Reel" className="w-full h-full object-cover opacity-80" />
+                        <div className="absolute inset-0 bg-slate-900/30 flex items-center justify-center group-hover:bg-slate-900/50 transition-all">
+                          <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 cursor-pointer hover:scale-110 transition-transform shadow-[0_0_30px_rgba(79,70,229,0.5)]">
+                            <Play className="text-white ml-1" fill="white" size={24} />
+                          </div>
                         </div>
-                    </div>
-               </div>
+                        <div className="absolute bottom-4 left-4 right-4">
+                          <div className="bg-black/60 backdrop-blur-sm p-3 rounded-lg border border-white/10">
+                            <p className="text-white text-xs font-bold mb-1">{product.name || 'إعلان الفيديو'}</p>
+                            <p className="text-indigo-300 text-[10px]">#موضة #أناقة</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Carousel Content */}
+                    {mediaTab === 'carousel' && (
+                      <div className="relative w-full aspect-square rounded-xl overflow-hidden shadow-2xl border border-slate-600 bg-slate-900 flex items-center justify-center">
+                        <div className="absolute inset-0 flex transition-transform duration-500 transform -translate-x-4 opacity-50 blur-sm">
+                          <img src="https://images.unsplash.com/photo-1434389678278-be4d41a6b8e8?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover rounded-xl" />
+                        </div>
+                        <div className="relative z-10 w-5/6 aspect-square rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.8)] border-2 border-indigo-500">
+                          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover" />
+                          <div className="absolute bottom-0 w-full bg-gradient-to-t from-slate-900 to-transparent p-4">
+                            <p className="text-white font-bold text-sm">مميزات المنتج (1/3)</p>
+                          </div>
+                        </div>
+                        <div className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur rounded-full flex items-center justify-center cursor-pointer hover:bg-white/30 text-white">
+                          <span style={{ display: 'inline-block' }}>&lt;</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Image Content */}
+                    {mediaTab === 'image' && (
+                      <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden shadow-2xl border border-slate-600 group">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=600" alt="Generated Ad" className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent flex flex-col justify-end p-6">
+                          <span className="bg-red-600 text-white text-[10px] font-black px-2 py-1 uppercase w-max mb-2 rounded shadow">عرض محدود</span>
+                          <h5 className="text-white font-black text-xl leading-tight text-shadow-md">{product.name || 'تشكيلة الموسم'}</h5>
+                        </div>
+                      </div>
+                    )}
+
+                    <p className="text-[10px] text-slate-500 mt-4 text-center">
+                      {mediaTab === 'video' ? 'تم إنشاء الفيديو آلياً باستخدام Image-to-Video AI' :
+                        mediaTab === 'carousel' ? 'تم توليد سلسلة صور كاروسيل تفاعلية' :
+                          'تم الإنشاء ديناميكياً عبر تقنية HTML-to-Image'}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
         </div>
       </main>
 
-      {/* Auto-Publishing Modal (GHL / Grow50x OS Simulation) */}
+      {/* Auto-Publishing Modal */}
       {showScheduleModal && (
-        <div className="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-50 flex items-center justify-center animate-in fade-in duration-200">
-            <div className="bg-slate-900 border border-slate-700 w-full max-w-lg rounded-2xl p-6 shadow-2xl relative">
-                <button onClick={() => setShowScheduleModal(false)} className="absolute top-4 right-4 text-slate-500 hover:text-white">✕</button>
-                
-                <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                    <Share2 className="text-indigo-500" /> الجدولة والنشر التلقائي
-                </h3>
-                <p className="text-xs text-slate-400 mb-6">سيتم إرسال الحملة فوراً إلى الـ Social Planner الخاص بك.</p>
-                
-                <div className="space-y-4">
-                    <div className="bg-slate-800 p-4 rounded-xl border border-slate-700 flex gap-4 items-center">
-                        <div className="w-12 h-16 bg-slate-900 rounded border border-slate-600 flex-shrink-0 overflow-hidden relative">
-                            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=200" alt="thumb" className="w-full h-full object-cover opacity-80" />
-                            <div className="absolute inset-0 flex items-center justify-center"><Play size={12} className="text-white" fill="white"/></div>
-                        </div>
-                        <div className="flex-1">
-                            <p className="text-sm font-bold text-white">{product.name || 'حملة إعلانية'}</p>
-                            <p className="text-xs text-slate-400 line-clamp-1">اكتشف الأناقة التي تتحدث عن نفسها...</p>
-                        </div>
-                    </div>
+        <div className="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-50 flex items-center justify-center animate-fade-in">
+          <div className="bg-slate-900 border border-slate-700 w-full max-w-lg rounded-2xl p-6 shadow-2xl relative">
+            <button onClick={() => setShowScheduleModal(false)} className="absolute top-4 left-4 text-slate-500 hover:text-white">✕</button>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase">تاريخ النشر</label>
-                            <input type="date" className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500" />
-                        </div>
-                        <div>
-                            <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase">الوقت</label>
-                            <input type="time" className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500" />
-                        </div>
-                    </div>
+            <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+              <Share2 className="text-indigo-500" /> الجدولة والنشر التلقائي
+            </h3>
+            <p className="text-xs text-slate-400 mb-6">سيتم إرسال الحملة فوراً إلى الـ Social Planner الخاص بك.</p>
 
-                    <div>
-                        <label className="block text-[10px] font-bold text-slate-400 mb-2 uppercase">المنصات المستهدفة</label>
-                        <div className="flex gap-3">
-                            <label className="flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 px-3 py-2 rounded-lg cursor-pointer">
-                                <input type="checkbox" defaultChecked className="accent-indigo-500" />
-                                <span className="text-xs font-bold text-indigo-400">Instagram</span>
-                            </label>
-                            <label className="flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 px-3 py-2 rounded-lg cursor-pointer">
-                                <input type="checkbox" defaultChecked className="accent-blue-500" />
-                                <span className="text-xs font-bold text-blue-400">Facebook</span>
-                            </label>
-                            <label className="flex items-center gap-2 bg-slate-800 border border-slate-700 px-3 py-2 rounded-lg cursor-pointer">
-                                <input type="checkbox" className="accent-slate-500" />
-                                <span className="text-xs font-bold text-slate-400">TikTok</span>
-                            </label>
-                        </div>
-                    </div>
+            <div className="space-y-4">
+              <div className="bg-slate-800 p-4 rounded-xl border border-slate-700 flex gap-4 items-center">
+                <div className="w-12 h-16 bg-slate-900 rounded border border-slate-600 flex-shrink-0 overflow-hidden relative">
+                  <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=200" alt="thumb" className="w-full h-full object-cover opacity-80" />
+                  <div className="absolute inset-0 flex items-center justify-center"><Play size={12} className="text-white" fill="white" /></div>
                 </div>
-
-                <div className="mt-8">
-                    <button className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg flex justify-center items-center gap-2">
-                        <Calendar size={18} /> تأكيد الجدولة في الـ Planner
-                    </button>
-                    <p className="text-[9px] text-center text-slate-500 mt-3 font-mono">Powered by GHL / Grow50x API integration</p>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-white">{product.name || 'حملة إعلانية'}</p>
+                  <p className="text-xs text-slate-400 line-clamp-1">اكتشف الأناقة التي تتحدث عن نفسها...</p>
                 </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase">تاريخ النشر</label>
+                  <input type="date" className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase">الوقت</label>
+                  <input type="time" className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500" />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-slate-400 mb-2 uppercase">المنصات المستهدفة</label>
+                <div className="flex gap-3">
+                  <label className="flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 px-3 py-2 rounded-lg cursor-pointer">
+                    <input type="checkbox" defaultChecked className="accent-indigo-500" />
+                    <span className="text-xs font-bold text-indigo-400">Instagram</span>
+                  </label>
+                  <label className="flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 px-3 py-2 rounded-lg cursor-pointer">
+                    <input type="checkbox" defaultChecked className="accent-blue-500" />
+                    <span className="text-xs font-bold text-blue-400">Facebook</span>
+                  </label>
+                  <label className="flex items-center gap-2 bg-slate-800 border border-slate-700 px-3 py-2 rounded-lg cursor-pointer">
+                    <input type="checkbox" className="accent-slate-500" />
+                    <span className="text-xs font-bold text-slate-400">TikTok</span>
+                  </label>
+                </div>
+              </div>
             </div>
+
+            <div className="mt-8">
+              <button className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg flex justify-center items-center gap-2">
+                <Calendar size={18} /> تأكيد الجدولة في الـ Planner
+              </button>
+              <p className="text-[9px] text-center text-slate-500 mt-3 font-mono">Powered by AI & API integration</p>
+            </div>
+          </div>
         </div>
       )}
 
